@@ -1,9 +1,34 @@
+/* TODO: comments, necessary flex elements ever needed?, how do I know when to specify wrap? */
+/* Animation grow: increase width of the element to enlarge the element */
+@keyframes grow {
+    from {
+        width: 25px;
+        opacity: 0;
+    }
+
+    to {
+        width: 475px;
+        opacity: 1;
+    }
+}
+
+/* Default view styling */ 
+/* Apply animation to the logo img */
+#logo {
+    animation-name: grow;
+    -webkit-animation-name: grow;
+    animation-duration: 5s;
+    -webkit-animation-duration: 5s;
+}
+
 body {
     font-family: "Poppins", serif;
     background-color: #f1f1f1;
     background-image: url(../images/concrete_seamless.png);
 }
 
+/* All headers: affects top header with logo and nav, as well as 
+the headers in each card that have the price & package name */
 header {
    display: flex;
    flex-direction: column;
@@ -14,20 +39,24 @@ header {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    align-content: center;
+    /* Align each link to the left */
     align-items: flex-start;
 }
 
-.nav_links:visited {
-    color: initial;
+/* Links will remain blue after visited */
+a:visited {
+    color: blue;
 }
 
+/* Styles headers where parent is .card class (direct children of a card class) */
 .card>header {
     background-color: #288088;
     border: solid 2px #45ADAD;
     padding: 20px 0;
 }
 
+/* .card curves the top corners of the div & must also curve the .header's top corners that are
+ at the top of the .card divs */
 .card, .card>header {
     border-top-left-radius: 50px;
     border-top-right-radius: 50px;
@@ -35,78 +64,122 @@ header {
     border-bottom-right-radius: 0;
 }
 
-.card {
-    flex-basis: 450px;
-}
-
+/* The .pricing class is the flex container of the cards */
 .pricing {
     display: flex;
+    /* Use direction row WITH wrap so that the cards will be in a column
+    and we can then use flex-basis to set their width */
+    flex-direction: row;
     flex-wrap: wrap;
+    /* Center cards within container horizontally & vertically */
     justify-content: center;
     align-items: center;
 }
 
+.card {
+    flex-basis: 450px;
+}
+
+/* Gallery image syling */
 .gallery img {
     border: solid 10px #50C7C7;
     margin: 10px;
     width: 300px;
 }
 
+/* Use flex direction of row and allow wrapping so images will be next to each other when possible 
+   Allowing wrap also allows the images to grow into one row as the screen size increase */
 .gallery {
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
 }
 
+/* Styling when the screen-size is greater than 900px */
 @media screen and (min-width: 900px) {
     header {
+        /* Change direction to row here so that the header and the links are on the same line */
         flex-direction: row;
+        flex-wrap: nowrap;
+        /* Pushes logo to the left side of the header and the links to the right */
         justify-content: space-between;
     }
 
+    /* Style the very fist header to remain visible at the top of the screen (top: 0)
+    even as we scroll down */
     body>header {
         position: sticky;
         top: 0;
     }
+
     .nav_links {
+        /* Navigation links are now side-by-side */
         flex-direction: row;
     }
 
+    /* This flex container for the cards remains with a flex-direction of row.
+       This is the default style set earlier, so no need to change it */
+    .pricing {
+        /* Keep the cards on one line */
+        flex-wrap: nowrap;
+    }
+
+    /* Change flex-basis from 450 to 275px */
     .card {
         flex-basis: 275px;
     }
 }
 
+/* Styling for when the user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    /* Remove the animation */
+    #logo {
+        animation-duration: 0s;
+    }
+}
+
+/* Styling for when the page is printed in portrait mode */
 @media print {
+    /* Change the font-family from the default style choices.
+    Remove the background-image (the background-color set in default
+    styling will remain) */
     body {
         font-family: Arial, Helvetica;
-        background-image: initial;
+        background-image: none;
+    }
+
+    /* Allow the nav element to take 100% width so that the flex items within
+    the flex container that is .nav_links can be spaced out using justify-content */
+    nav {
+        width: 100%;
     }
 
     .nav_links {
         flex-direction: row;
+        justify-content: space-around;
     }
 
-    nav {
-        display: flex;
-        flex-basis: 100%;
-        flex-wrap: wrap;
-    }
-
+    /* Align the items (.card divs) the flex-end so that they align along the bottom */
     .pricing {
         flex-wrap: nowrap;
         align-items: flex-end;
     }
 
+    /* Change the flex-basis size of the cards and slightly modify their
+    borders to have a different color. */
     .card {
         border: solid 2px #45ADDD;
         flex-basis: 325px;
     }
 
+    /* Remove the gallery from visibility*/
     .gallery, #gallery {
         display: none;
     }
 
+    /* Add the thumbs-up emoji after the content presnted in the second li elements
+    who parent element is ul */
     .card ul>li:nth-child(2)::after {
         content: '👍';
     }
